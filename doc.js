@@ -73,7 +73,12 @@ var accessLogStream = fs.createWriteStream(path.join(__dirname, 'access.log'), {
 app.get("/usuarios", async(req,res)=>{
   req.token
   try {
-    const conn = await mysql.createConnection({host:'localhost',user:'root',password:'root',database:'serverbd', port: 3307})
+    const DB_HOST = process.env.DB_HOST ||  'localhost';
+    const DB_NAME = process.env.DB_NAME || 'serverbd';
+    const DB_PASSWORD = process.env.DB_PASSWORD || 'root';
+    const DB_PORT = process.env.DB_PORT || 3307;
+    const DB_USER = process.env.DB_USER || 'root';
+    const conn = await mysql.createConnection({host:DB_HOST,user:DB_USER,password:DB_PASSWORD,database:DB_NAME, port: DB_PORT});
     const [rows, fields] = await conn.promise().query('SELECT * FROM ALUMNOS')
     res.json(rows)
   } catch (err){
@@ -116,7 +121,12 @@ app.get("/usuarios", async(req,res)=>{
  app.get("/usuarios/:id", async(req,res,next)=>{
   try{
   console.log(req.params.id)
-  const conn = await mysql.createConnection({host:'localhost',user:'root',password:'root',database:'serverbd', port:3307})
+  const DB_HOST = process.env.DB_HOST ||  'localhost';
+  const DB_NAME = process.env.DB_NAME || 'serverbd';
+  const DB_PASSWORD = process.env.DB_PASSWORD || 'root';
+  const DB_PORT = process.env.DB_PORT || 3307;
+  const DB_USER = process.env.DB_USER || 'root';
+  const conn = await mysql.createConnection({host:DB_HOST,user:DB_USER,password:DB_PASSWORD,database:DB_NAME, port: DB_PORT});
   const [rows, fields] = await conn.promise().query('SELECT * FROM ALUMNOS where matricula='+req.params.id)
   if(rows.length==0){
     let e = new Error("Error del lado de usuario, id inexistente.")
@@ -178,7 +188,12 @@ app.use("/api-docs-json",(req,res)=>{
 app.delete("/usuarios", async(req,res)=>{
   console.log(req.query)
   try {
-    const conn = await mysql.createConnection({host:'localhost',user:'root',password:'root',database:'serverbd', port: 3307})
+    const DB_HOST = process.env.DB_HOST ||  'localhost';
+    const DB_NAME = process.env.DB_NAME || 'serverbd';
+    const DB_PASSWORD = process.env.DB_PASSWORD || 'root';
+    const DB_PORT = process.env.DB_PORT || 3307;
+    const DB_USER = process.env.DB_USER || 'root';
+    const conn = await mysql.createConnection({host:DB_HOST,user:DB_USER,password:DB_PASSWORD,database:DB_NAME, port: DB_PORT});
     const [rows, fields] = await conn.promise().query(`delete FROM ALUMNOS WHERE Matricula = ${req.query.idUsuario}`)
     if(rows.affectedRows==0){
       res.status(404).json({mensaje:"Registro no eliminado"})
@@ -238,7 +253,12 @@ app.delete("/usuarios", async(req,res)=>{
  */
 app.post("/usuarios", async(req,res)=>{
   try {
-    const conn = await mysql.createConnection({host:'localhost',user:'root',password:'root',database:'serverbd', port: 3307})
+    const DB_HOST = process.env.DB_HOST ||  'localhost';
+    const DB_NAME = process.env.DB_NAME || 'serverbd';
+    const DB_PASSWORD = process.env.DB_PASSWORD || 'root';
+    const DB_PORT = process.env.DB_PORT || 3307;
+    const DB_USER = process.env.DB_USER || 'root';
+    const conn = await mysql.createConnection({host:DB_HOST,user:DB_USER,password:DB_PASSWORD,database:DB_NAME, port: DB_PORT});
 
   const [rows, fields] = await conn.promise().query("INSERT INTO `serverbd`.`alumnos` VALUES ('" + req.query.matricula + "', '" + req.query.nombre + "', '" + req.query.semestre + "', '" + req.query.carrera + "');");
 
@@ -315,7 +335,12 @@ app.put("/usuarios/:id",async(req,res)=>{
   sentencia = sentenciaUpdate + camposModificar + sentenciaWhere;
   console.log(sentencia);
   try{
-    const conn = await mysql.createConnection({host:'localhost',user:'root',password:'root',database:'serverbd', port: 3307});
+    const DB_HOST = process.env.DB_HOST ||  'localhost';
+    const DB_NAME = process.env.DB_NAME || 'serverbd';
+    const DB_PASSWORD = process.env.DB_PASSWORD || 'root';
+    const DB_PORT = process.env.DB_PORT || 3307;
+    const DB_USER = process.env.DB_USER || 'root';
+    const conn = await mysql.createConnection({host:DB_HOST,user:DB_USER,password:DB_PASSWORD,database:DB_NAME, port: DB_PORT});
     const [rows, fields] = await conn.promise().query(sentencia);
 
     // Verificación si la actualización fue exitosa.

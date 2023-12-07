@@ -368,7 +368,7 @@
     "mocha": "^10.2.0"
   },
   "scripts": {
-    "start": "npm ./doc.js"
+    "start": "node ./doc.js"
   },
   "repository": {
     "type": "git",
