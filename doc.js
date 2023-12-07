@@ -194,7 +194,7 @@ app.delete("/usuarios", async(req,res)=>{
     const DB_PORT = process.env.DB_PORT || 3307;
     const DB_USER = process.env.DB_USER || 'root';
     const conn = await mysql.createConnection({host:DB_HOST,user:DB_USER,password:DB_PASSWORD,database:DB_NAME, port: DB_PORT});
-    const [rows, fields] = await conn.promise().query(`delete FROM ALUMNOS WHERE Matricula = ${req.query.idUsuario}`)
+    const [rows, fields] = await conn.promise().query(`delete FROM ALUMNOS WHERE matricula = ${req.query.idUsuario}`)
     if(rows.affectedRows==0){
       res.status(404).json({mensaje:"Registro no eliminado"})
     }else{res.status(200).json({mensaje: "Alumno eliminado"})}
@@ -260,7 +260,7 @@ app.post("/usuarios", async(req,res)=>{
     const DB_USER = process.env.DB_USER || 'root';
     const conn = await mysql.createConnection({host:DB_HOST,user:DB_USER,password:DB_PASSWORD,database:DB_NAME, port: DB_PORT});
 
-  const [rows, fields] = await conn.promise().query("INSERT INTO `serverbd`.`alumnos` VALUES ('" + req.query.matricula + "', '" + req.query.nombre + "', '" + req.query.semestre + "', '" + req.query.carrera + "');");
+  const [rows, fields] = await conn.promise().query("INSERT INTO `ALUMNOS` VALUES ('" + req.query.matricula + "', '" + req.query.nombre + "', '" + req.query.semestre + "', '" + req.query.carrera + "');");
 
   // Respondemos con un JSON que contiene información sobre la inserción exitosa del nuevo alumno.
   res.status(200).json({ mensaje: "El alumno ha sido agregado correctamente." });
@@ -319,7 +319,7 @@ app.post("/usuarios", async(req,res)=>{
 app.put("/usuarios/:id",async(req,res)=>{
   console.log(req.body)
   let sentencia = "";
-  let sentenciaUpdate = "UPDATE `alumnos` SET ";
+  let sentenciaUpdate = "UPDATE `ALUMNOS` SET ";
   let sentenciaWhere = 'WHERE matricula = ' + req.params.id ;
   let camposModificar = "";
   let campos = Object.keys(req.body);
