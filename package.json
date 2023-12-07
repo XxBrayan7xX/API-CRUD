@@ -1,0 +1,36 @@
+{
+  "dependencies": {
+    "chai": "^4.3.10",
+    "chai-http": "^4.4.0",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "express-basic-auth": "^1.2.1",
+    "express-bearer-token": "^2.4.0",
+    "fs": "^0.0.1-security",
+    "jest": "^29.7.0",
+    "mocha": "^10.2.0",
+    "morgan": "^1.10.0",
+    "mysql2": "^3.6.1",
+    "node-fetch": "^2.7.0",
+    "openapi-snippet": "^0.14.0",
+    "path": "^0.12.7",
+    "redoc-express": "^2.1.0",
+    "supertest": "^6.3.3",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-themes": "^1.2.30",
+    "swagger-ui-express": "^5.0.0"
+  },
+  "name": "serverbd",
+  "description": "Esta es una API para coonsultar",
+  "version": "1.0.0",
+  "main": "doc.js",
+  "directories": {
+    "test": "mocha"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

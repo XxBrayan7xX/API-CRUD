@@ -1,0 +1,13 @@
+const request = require('supertest')
+let url='http://localhost:8087'
+
+describe("testeo a ruta usuario", () => {
+    it("testeo metodo get a la ruta usuario me debe dar un status 200", (done) => {
+        request(url)
+            .get('/usuarios')
+            .end((err, res) => {
+                expect(res.statusCode).toBe(200);
+                done();
+            });
+    });
+});
