@@ -14,7 +14,6 @@ const { error } = require('console');
 
 const theme = new SwaggerTheme('v3');
 
-
 const options = {
   explorer: true,
   customCss: theme.getBuffer('feeling-blue')
