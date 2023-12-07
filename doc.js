@@ -24,7 +24,7 @@ app.use(express.json())
 const def = fs.readFileSync(path.join(__dirname,'./swagger.json'),
   {encoding: 'utf-8', flag:'r'});
 const read =fs.readFileSync(path.join(__dirname,'./str/README.MD'),
-  {encoding: 'utf8',flag:'r'})
+  {encoding: 'utf-8',flag:'r'})
 const defObj = JSON.parse(def)
 defObj.info.description=read
 
