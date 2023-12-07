@@ -206,7 +206,7 @@ app.delete("/usuarios", async(req,res)=>{
 })
 /**
  * @swagger
- * /alumno:
+ * /usuarios:
  *   post:
  *     tags:
  *       - alumnos
@@ -294,7 +294,9 @@ app.post("/usuarios", async(req,res)=>{
  *           properties:
  *             nombre:
  *               type: string
- *             apellido:
+ *             semestre:
+ *               type: integer
+ *             carrera:
  *               type: string
  *     responses:
  *       200:
