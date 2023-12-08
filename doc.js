@@ -160,7 +160,7 @@ app.use("/api-docs-json",(req,res)=>{
  *     description: Elimina un alumno de la Base de Datos según su ID.
  *     parameters:
  *       - name: id
- *         in: query
+ *         in: path
  *         description: ID del alumno a eliminar
  *         required: true
  *         schema:
@@ -274,7 +274,7 @@ app.post("/usuarios", async(req,res)=>{
  * @swagger
  * /usuarios/{id}:
  *   put:
-*     tags:
+ *     tags:
  *       - alumnos
  *     summary: Actualizar información de un alumno por ID
  *     description: Actualiza la información de un alumno en la Base de Datos según su ID.
