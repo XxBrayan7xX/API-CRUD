@@ -160,7 +160,7 @@ app.use("/api-docs-json",(req,res)=>{
  *     description: Elimina un alumno de la Base de Datos según su ID.
  *     parameters:
  *       - name: id
- *         in: path
+ *         in: query
  *         description: ID del alumno a eliminar
  *         required: true
  *         schema:
