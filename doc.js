@@ -21,23 +21,23 @@ const options = {
 
 var app = express()
 app.use(express.json())
-const def = fs.readFileSync(path.join(__dirname,'./swagger.json'),
-  {encoding: 'utf-8', flag:'r'});
-const read =fs.readFileSync(path.join(__dirname,'./str/README.md'),
-  {encoding: 'utf-8',flag:'r'})
+const def = fs.readFileSync(path.join(__dirname, './swagger.json'),
+  { encoding: 'utf-8', flag: 'r' });
+const read = fs.readFileSync(path.join(__dirname, './str/README.md'),
+  { encoding: 'utf-8', flag: 'r' })
 const defObj = JSON.parse(def)
-defObj.info.description=read
+defObj.info.description = read
 
 const swaggerOptions = {
-  definition:defObj,
-  apis: [`${path.join(__dirname,"doc.js")}`],
+  definition: defObj,
+  apis: [`${path.join(__dirname, "doc.js")}`],
 }
 
 
 // create a write stream (in append mode)
 //app.use(bearerToken());
 //app.use(function (req, res) {
-  //res.send('miTOken '+req.token);
+//res.send('miTOken '+req.token);
 //});
 
 
@@ -69,85 +69,85 @@ var accessLogStream = fs.createWriteStream(path.join(__dirname, 'access.log'), {
  *               mensaje: Mensaje de error específico generado por la base de datos.
  */
 
- 
-app.get("/usuarios", async(req,res)=>{
+
+app.get("/usuarios", async (req, res) => {
   req.token
   try {
-    const DB_HOST = process.env.DB_HOST ||  'localhost';
+    const DB_HOST = process.env.DB_HOST || 'localhost';
     const DB_NAME = process.env.DB_NAME || 'serverbd';
     const DB_PASSWORD = process.env.DB_PASSWORD || 'root';
     const DB_PORT = process.env.DB_PORT || 3307;
     const DB_USER = process.env.DB_USER || 'root';
-    const conn = await mysql.createConnection({host:DB_HOST,user:DB_USER,password:DB_PASSWORD,database:DB_NAME, port: DB_PORT});
+    const conn = await mysql.createConnection({ host: DB_HOST, user: DB_USER, password: DB_PASSWORD, database: DB_NAME, port: DB_PORT });
     const [rows, fields] = await conn.promise().query('SELECT * FROM ALUMNOS')
     res.json(rows)
-  } catch (err){
-    res.status(500).json({mensaje:err.sqlMessage})
+  } catch (err) {
+    res.status(500).json({ mensaje: err.sqlMessage })
   }
 
-/**
- * @swagger
- * /usuarios/{id}:
- *   get:
- *     tags:
- *       - usuario
- *     summary: Consultar un usuario en base a su matricula
- *     description: Obtiene un JSON conteniendo uno de los usuarios que se encuentren el la BD
- *     parameters:
- *       - name: id
- *         in: path
- *         description: ID del alumno a consultar
- *         required: true
- *         schema:
- *           type: integer
- *     responses:
- *       200:
- *         description: Regresa un JSON conteniendo uno los usuarios de la BD
- *       404:
- *         description: No se encontró ningún alumno con el ID proporcionado.
- *         content:
- *           application/json:
- *             example:
- *               mensaje: El alumno no existe.
- *       500:
- *         description: Error interno del servidor al intentar consultar la información del alumno.
- *         content:
- *           application/json:
- *             example:
- *               mensaje: Mensaje de error específico generado por la base de datos.      
- */
+  /**
+   * @swagger
+   * /usuarios/{id}:
+   *   get:
+   *     tags:
+   *       - usuario
+   *     summary: Consultar un usuario en base a su matricula
+   *     description: Obtiene un JSON conteniendo uno de los usuarios que se encuentren el la BD
+   *     parameters:
+   *       - name: id
+   *         in: path
+   *         description: ID del alumno a consultar
+   *         required: true
+   *         schema:
+   *           type: integer
+   *     responses:
+   *       200:
+   *         description: Regresa un JSON conteniendo uno los usuarios de la BD
+   *       404:
+   *         description: No se encontró ningún alumno con el ID proporcionado.
+   *         content:
+   *           application/json:
+   *             example:
+   *               mensaje: El alumno no existe.
+   *       500:
+   *         description: Error interno del servidor al intentar consultar la información del alumno.
+   *         content:
+   *           application/json:
+   *             example:
+   *               mensaje: Mensaje de error específico generado por la base de datos.      
+   */
 
 })
- app.get("/usuarios/:id", async(req,res,next)=>{
-  try{
-  console.log(req.params.id)
-  const DB_HOST = process.env.DB_HOST ||  'localhost';
-  const DB_NAME = process.env.DB_NAME || 'serverbd';
-  const DB_PASSWORD = process.env.DB_PASSWORD || 'root';
-  const DB_PORT = process.env.DB_PORT || 3307;
-  const DB_USER = process.env.DB_USER || 'root';
-  const conn = await mysql.createConnection({host:DB_HOST,user:DB_USER,password:DB_PASSWORD,database:DB_NAME, port: DB_PORT});
-  const [rows, fields] = await conn.promise().query('SELECT * FROM ALUMNOS where matricula='+req.params.id)
-  if(rows.length==0){
-    let e = new Error("Error del lado de usuario, id inexistente.")
+app.get("/usuarios/:id", async (req, res, next) => {
+  try {
+    console.log(req.params.id)
+    const DB_HOST = process.env.DB_HOST || 'localhost';
+    const DB_NAME = process.env.DB_NAME || 'serverbd';
+    const DB_PASSWORD = process.env.DB_PASSWORD || 'root';
+    const DB_PORT = process.env.DB_PORT || 3307;
+    const DB_USER = process.env.DB_USER || 'root';
+    const conn = await mysql.createConnection({ host: DB_HOST, user: DB_USER, password: DB_PASSWORD, database: DB_NAME, port: DB_PORT });
+    const [rows, fields] = await conn.promise().query('SELECT * FROM ALUMNOS where matricula=' + req.params.id)
+    if (rows.length == 0) {
+      let e = new Error("Error del lado de usuario, id inexistente.")
+      next(e)
+    }
+    else {
+      res.json(rows)
+    }
+  }
+  catch {
+    let e = new Error("No es posible establecer la conexion")
     next(e)
   }
-  else{
-    res.json(rows)
-  }
-}
-catch{
-  let e = new Error("No es posible establecer la conexion")
-  next(e)
-}
 })
-app.use((err,req,res,next)=>{
+app.use((err, req, res, next) => {
   res.status(500)
-  res.send({Error: err.message})
+  res.send({ Error: err.message })
 })
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
-app.use("/api-docs",swaggerUI.serve,swaggerUI.setup(swaggerDocs,options));
-app.use("/api-docs-json",(req,res)=>{
+app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerDocs, options));
+app.use("/api-docs-json", (req, res) => {
   res.json(swaggerDocs);
 });
 /**
@@ -185,23 +185,23 @@ app.use("/api-docs-json",(req,res)=>{
  *             example:
  *               mensaje: Mensaje de error específico generado por la base de datos.
  */
-app.delete("/usuarios", async(req,res)=>{
+app.delete("/usuarios", async (req, res) => {
   console.log(req.query)
   try {
-    const DB_HOST = process.env.DB_HOST ||  'localhost';
+    const DB_HOST = process.env.DB_HOST || 'localhost';
     const DB_NAME = process.env.DB_NAME || 'serverbd';
     const DB_PASSWORD = process.env.DB_PASSWORD || 'root';
     const DB_PORT = process.env.DB_PORT || 3307;
     const DB_USER = process.env.DB_USER || 'root';
-    const conn = await mysql.createConnection({host:DB_HOST,user:DB_USER,password:DB_PASSWORD,database:DB_NAME, port: DB_PORT});
+    const conn = await mysql.createConnection({ host: DB_HOST, user: DB_USER, password: DB_PASSWORD, database: DB_NAME, port: DB_PORT });
     const [rows, fields] = await conn.promise().query(`delete FROM ALUMNOS WHERE matricula = ${req.query.idUsuario}`)
-    if(rows.affectedRows==0){
-      res.status(404).json({mensaje:"Registro no eliminado"})
-    }else{res.status(200).json({mensaje: "Alumno eliminado"})}
+    if (rows.affectedRows == 0) {
+      res.status(404).json({ mensaje: "Registro no eliminado" })
+    } else { res.status(200).json({ mensaje: "Alumno eliminado" }) }
 
     //res.json(rows)
-  } catch (err){
-    res.status(500).json({mensaje:err.sqlMessage})
+  } catch (err) {
+    res.status(500).json({ mensaje: err.sqlMessage })
   }
 })
 /**
@@ -251,23 +251,23 @@ app.delete("/usuarios", async(req,res)=>{
  *             example:
  *               mensaje: Mensaje de error específico generado por la BD.
  */
-app.post("/usuarios", async(req,res)=>{
+app.post("/usuarios", async (req, res) => {
   try {
-    const DB_HOST = process.env.DB_HOST ||  'localhost';
+    const DB_HOST = process.env.DB_HOST || 'localhost';
     const DB_NAME = process.env.DB_NAME || 'serverbd';
     const DB_PASSWORD = process.env.DB_PASSWORD || 'root';
     const DB_PORT = process.env.DB_PORT || 3307;
     const DB_USER = process.env.DB_USER || 'root';
-    const conn = await mysql.createConnection({host:DB_HOST,user:DB_USER,password:DB_PASSWORD,database:DB_NAME, port: DB_PORT});
+    const conn = await mysql.createConnection({ host: DB_HOST, user: DB_USER, password: DB_PASSWORD, database: DB_NAME, port: DB_PORT });
 
-  const [rows, fields] = await conn.promise().query("INSERT INTO `ALUMNOS` VALUES ('" + req.query.matricula + "', '" + req.query.nombre + "', '" + req.query.semestre + "', '" + req.query.carrera + "');");
+    const [rows, fields] = await conn.promise().query("INSERT INTO `ALUMNOS` VALUES ('" + req.query.matricula + "', '" + req.query.nombre + "', '" + req.query.semestre + "', '" + req.query.carrera + "');");
 
-  // Respondemos con un JSON que contiene información sobre la inserción exitosa del nuevo alumno.
-  res.status(200).json({ mensaje: "El alumno ha sido agregado correctamente." });
-} catch (err) {
-  // En caso de un error, respondemos con un código de estado 500 y un mensaje de error específico.
-  res.status(500).json({ mensaje: err.sqlMessage });
-}
+    // Respondemos con un JSON que contiene información sobre la inserción exitosa del nuevo alumno.
+    res.status(200).json({ mensaje: "El alumno ha sido agregado correctamente." });
+  } catch (err) {
+    // En caso de un error, respondemos con un código de estado 500 y un mensaje de error específico.
+    res.status(500).json({ mensaje: err.sqlMessage });
+  }
 });
 
 /**
@@ -318,52 +318,39 @@ app.post("/usuarios", async(req,res)=>{
  *             example:
  *               mensaje: Mensaje de error específico generado por la base de datos.
  */
-app.put("/usuarios/:id",async(req,res)=>{
-  console.log(req.body)
-  let sentencia = "";
-  let sentenciaUpdate = "UPDATE `ALUMNOS` SET ";
-  let sentenciaWhere = 'WHERE matricula = ' + req.params.id ;
-  let camposModificar = "";
-  let campos = Object.keys(req.body);
-  var segundo = false;
-  campos.forEach(campo => {
-    if (segundo == false) {
-      camposModificar = camposModificar + ("`" + campo + "` = '" + req.body[campo] + "' ");
-      segundo = true;
-    } else {
-      camposModificar = camposModificar + (", `" + campo + "` = '" + req.body[campo] + "' ");
-    }
-  });
-  sentencia = sentenciaUpdate + camposModificar + sentenciaWhere;
-  console.log(sentencia);
-  try{
-    const DB_HOST = process.env.DB_HOST ||  'localhost';
+app.put("/usuarios/:id", async (req, res) => {
+  try {
+    const DB_HOST = process.env.DB_HOST || 'localhost';
     const DB_NAME = process.env.DB_NAME || 'serverbd';
     const DB_PASSWORD = process.env.DB_PASSWORD || 'root';
     const DB_PORT = process.env.DB_PORT || 3307;
     const DB_USER = process.env.DB_USER || 'root';
-    const conn = await mysql.createConnection({host:DB_HOST,user:DB_USER,password:DB_PASSWORD,database:DB_NAME, port: DB_PORT});
-    const [rows, fields] = await conn.promise().query(sentencia);
+    const conn = await mysql.createConnection({ host: DB_HOST, user: DB_USER, password: DB_PASSWORD, database: DB_NAME, port: DB_PORT });
+    const { nombre, semestre, carrera } = req.body;
+    console.log(req.body);
 
-    // Verificación si la actualización fue exitosa.
-    if (rows.affectedRows === 0) {
-      // No se encontró ningún alumno con el ID proporcionado.
-      res.status(404).json({ mensaje: "El alumno no existe." });
+    // Verificar si el ID proporcionado existe antes de intentar actualizar
+    const [result] = await conn.query('SELECT * FROM modelo WHERE ID = ?', [req.params.id]);
+
+    if (result.length === 0) {
+      // Si no se encuentra ningún registro con el ID proporcionado, devolver un error 404
+      res.status(404).json({ mensaje: "No se encontró el auto con ID " + req.params.id });
     } else {
-      // Respondemos con un mensaje indicando que la información del alumno ha sido actualizada correctamente.
-      res.status(200).json({ mensaje: "La información del alumno ha sido actualizada correctamente." });
+      // Actualizar el registro si se encuentra el ID
+      await conn.query('UPDATE ALUMNOS SET nombre = ? , semestre = ?, carrera = ? WHERE ID = ?', [nombre, semestre, carrera, req.params.id]);
+      res.json({ mensaje: "ACTUALIZADO " + Nombre });
     }
-  }catch (err) {
-    // En caso de un error, respondemos con un código de estado 500 y un mensaje de error específico.
+  } catch (err) {
     res.status(500).json({ mensaje: err.sqlMessage });
   }
 });
 
-app.get("/alumnos", (req,res)=>{
-    res.send("servidor express contestando a peticion get")
+
+app.get("/alumnos", (req, res) => {
+  res.send("servidor express contestando a peticion get")
 })
-app.post("/alumnos", (req,res)=>{
-    res.send("servidor express contestando a peticion post")
+app.post("/alumnos", (req, res) => {
+  res.send("servidor express contestando a peticion post")
 })
 
 
@@ -401,8 +388,8 @@ app.get(
 );
 
 
-app.listen(3000,(req,res)=>{
-    console.log("El servidor express esta escuchando...")
+app.listen(3000, (req, res) => {
+  console.log("El servidor express esta escuchando...")
 })
 
 // fetch("http://localhost:8087/api-docs-json")
@@ -422,7 +409,7 @@ app.listen(3000,(req,res)=>{
 // }
 // })
 
- 
+
 
 
 
