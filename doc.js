@@ -152,7 +152,7 @@ app.use("/api-docs-json",(req,res)=>{
 });
 /**
  * @swagger
- * /usuarios/{id}:
+ * /usuarios:
  *   delete:
  *     tags:
  *       - alumnos
