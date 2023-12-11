@@ -336,6 +336,8 @@ app.put("/usuarios/:id", async (req, res) => {
       // Si no se encuentra ningún registro con el ID proporcionado, devolver un error 404
       res.status(404).json({ mensaje: "No se encontró el usuario con ID " + req.params.id });
     } else {
+      const cadenaT = 'UPDATE `ALUMNOS` SET `nombre` = ' + nombre+', `semestre` = '+semestre+', `carrera` = '+carrera+' WHERE `matricula` = '+req.params.id
+      console.log(cadenaT)
       // Actualizar el registro si se encuentra el ID
       await conn.query('UPDATE `ALUMNOS` SET `nombre` = ? , `semestre` = ?, `carrera` = ? WHERE `matricula` = ?', [nombre, semestre, carrera, req.params.id]);
       res.json({ mensaje: "ACTUALIZADO " + nombre });
