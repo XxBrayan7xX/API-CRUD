@@ -285,19 +285,24 @@ app.post("/usuarios", async (req, res) => {
  *         required: true
  *         schema:
  *           type: integer
- *       - name: body
- *         in: body
- *         description: Campos que se actualizaran en el alumno
+ *       - name: nombre
+ *         in: query
+ *         description: Nombre del nuevo alumno
  *         required: true
  *         schema:
- *           type: object
- *           properties:
- *             nombre:
- *               type: string
- *             semestre:
- *               type: integer
- *             carrera:
- *               type: string
+ *           type: string
+ *       - name: semestre
+ *         in: query
+ *         description: Semestre del nuevo alumno
+ *         required: true
+ *         schema:
+ *           type: integer
+ *       - name: carrera
+ *         in: query
+ *         description: Carrera del nuevo alumno
+ *         required: true
+ *         schema:
+ *           type: string
  *     responses:
  *       200:
  *         description: La información del alumno ha sido actualizada correctamente.
