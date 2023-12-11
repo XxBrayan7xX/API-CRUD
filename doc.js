@@ -335,7 +335,7 @@ app.put("/usuarios/:id", async (req, res) => {
     const semestre = req.query.semestre;
     const carrera = req.query.carrera
     console.log(req.body);
-    const cadenaT = 'UPDATE `ALUMNOS` SET `nombre` = ' + nombre+', `semestre` = '+semestre+', `carrera` = '+carrera+' WHERE `matricula` = '+req.params.id
+    const cadenaT = 'UPDATE `ALUMNOS` SET `nombre` = "' + nombre+'", `semestre` = '+semestre+', `carrera` = "'+carrera+'" WHERE `matricula` = '+req.params.id
     console.log(cadenaT)
     // Verificar si el ID proporcionado existe antes de intentar actualizar
     const [result] = await conn.query('SELECT * FROM ALUMNOS WHERE matricula = '+ req.params.id);
