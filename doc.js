@@ -326,7 +326,9 @@ app.put("/usuarios/:id", async (req, res) => {
     const DB_PORT = process.env.DB_PORT || 3307;
     const DB_USER = process.env.DB_USER || 'root';
     const conn = await mysql.createConnection({ host: DB_HOST, user: DB_USER, password: DB_PASSWORD, database: DB_NAME, port: DB_PORT });
-    const { nombre, semestre, carrera } = req.body;
+    const nombre = req.query.nombre;
+    const semestre = req.query.semestre;
+    const carrera = req.query.carrera
     console.log(req.body);
     const cadenaT = 'UPDATE `ALUMNOS` SET `nombre` = ' + nombre+', `semestre` = '+semestre+', `carrera` = '+carrera+' WHERE `matricula` = '+req.params.id
     console.log(cadenaT)
@@ -337,9 +339,8 @@ app.put("/usuarios/:id", async (req, res) => {
       // Si no se encuentra ningún registro con el ID proporcionado, devolver un error 404
       res.status(404).json({ mensaje: "No se encontró el usuario con ID " + req.params.id });
     } else {
-      console.log(cadenaT)
       // Actualizar el registro si se encuentra el ID
-      await conn.query('UPDATE `ALUMNOS` SET `nombre` = ? , `semestre` = ?, `carrera` = ? WHERE `matricula` = ?', [nombre, semestre, carrera, req.params.id]);
+      await conn.query(cadenaT);
       res.json({ mensaje: "ACTUALIZADO " + nombre });
     }
   } catch (err) {
