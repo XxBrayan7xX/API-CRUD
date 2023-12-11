@@ -342,7 +342,7 @@ app.put("/usuarios/:id", async (req, res) => {
 
     if (rows.length === 0) {
       // Si no se encuentra ningún registro con el ID proporcionado, devolver un error 404
-      res.status(404).json({ mensaje: "No se encontró el usuario con ID " + req.params.id });
+      res.status(404).json({ mensaje: "No se encontró el alumno con matricula " + req.params.id });
     } else {
       // Actualizar el registro si se encuentra el ID
       const [rows, fields] = await conn.promise().query(cadenaT);
