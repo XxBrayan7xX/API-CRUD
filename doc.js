@@ -328,7 +328,7 @@ let valores = Object.values(objeto);
 
 let cadenaUpdate = "Update ALUMNOS";
 let cadenaSet = "";
-let CadenaWhere = CadenaWhere = "where matricula" + '=' + req.params;;
+let CadenaWhere = "where matricula" + '=' + req.params;;
 
 campos.forEach((campo, index) => {
       cadenaSet = `${cadenaSet}  ${campo} = '${objeto[campo]}'`;
