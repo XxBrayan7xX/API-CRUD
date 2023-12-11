@@ -328,16 +328,12 @@ let valores = Object.values(objeto);
 
 let cadenaUpdate = "Update ALUMNOS";
 let cadenaSet = "";
-let CadenaWhere = "where";
+let CadenaWhere = CadenaWhere = "where matricula" + '=' + req.params;;
 
 campos.forEach((campo, index) => {
-  if (campo == "matricula") {
-      CadenaWhere = "where "+ campo + '=' + objeto[campo];
-  } else {
       cadenaSet = `${cadenaSet}  ${campo} = '${objeto[campo]}'`;
       if (index < campos.length - 1) {
           cadenaSet += ',';
-      }
   }
 });
 var sentencia = cadenaUpdate + ' SET ' + cadenaSet + ' ' + CadenaWhere;
