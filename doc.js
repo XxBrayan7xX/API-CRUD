@@ -319,50 +319,32 @@ app.post("/usuarios", async (req, res) => {
  *               mensaje: Mensaje de error específico generado por la base de datos.
  */
 app.put("/usuarios/:id", async (req, res) => {
-  console.log(req.params);
-  //----
-  let objeto = req.body;
-let campos = Object.keys(objeto);
-console.log(campos);
-let valores = Object.values(objeto);
-
-let cadenaUpdate = "Update ALUMNOS";
-let cadenaSet = "";
-let CadenaWhere = "where matricula" + '=' + req.params;;
-
-campos.forEach((campo, index) => {
-      cadenaSet = `${cadenaSet}  ${campo} = '${objeto[campo]}'`;
-      if (index < campos.length - 1) {
-          cadenaSet += ',';
-  }
-});
-var sentencia = cadenaUpdate + ' SET ' + cadenaSet + ' ' + CadenaWhere;
-console.log(sentencia)
-//-------------
-  const { nombre, semestre, carrera } = req.query;
-
-  // if (!id || !nombre || !apellido) {
-  //     res.status(400).json({ mensaje: "Se requieren los parámetros id y nuevoCampo" });
-  //     return;
-  // }
   try {
-      const DB_HOST = process.env.DB_HOST || 'localhost';
-      const DB_NAME = process.env.DB_NAME || 'serverbd';
-      const DB_PASSWORD = process.env.DB_PASSWORD || 'root';
-      const DB_PORT = process.env.DB_PORT || 3307;
-      const DB_USER = process.env.DB_USER || 'root';
-      const conn = await mysql.createConnection({ host: DB_HOST, user: DB_USER, password: DB_PASSWORD, database: DB_NAME, port: DB_PORT });
-      const [result] = await conn.query(sentencia);
+    const DB_HOST = process.env.DB_HOST || 'localhost';
+    const DB_NAME = process.env.DB_NAME || 'serverbd';
+    const DB_PASSWORD = process.env.DB_PASSWORD || 'root';
+    const DB_PORT = process.env.DB_PORT || 3307;
+    const DB_USER = process.env.DB_USER || 'root';
+    const conn = await mysql.createConnection({ host: DB_HOST, user: DB_USER, password: DB_PASSWORD, database: DB_NAME, port: DB_PORT });
+    const { nombre, semestre, carrera } = req.body;
+    console.log(req.body);
 
-      if (result.affectedRows > 0) {
-          res.json({ mensaje: "Registro modificado correctamente" });
-      } else {
-          res.status(404).json({ mensaje: "No se encontró ningún registro para modificar" });
-      }
+    // Verificar si el ID proporcionado existe antes de intentar actualizar
+    const [result] = await conn.query('SELECT * FROM ALUMNOS WHERE matricula = '+ req.params.id);
+
+    if (result.length === 0) {
+      // Si no se encuentra ningún registro con el ID proporcionado, devolver un error 404
+      res.status(404).json({ mensaje: "No se encontró el usuario con ID " + req.params.id });
+    } else {
+      // Actualizar el registro si se encuentra el ID
+      await conn.query('UPDATE `ALUMNOS` SET `nombre` = ? , `semestre` = ?, `carrera` = ? WHERE `matricula` = ?', [nombre, semestre, carrera, req.params.id]);
+      res.json({ mensaje: "ACTUALIZADO " + nombre });
+    }
   } catch (err) {
-      res.status(500).json({ mensaje: err.sqlMessage });
+    res.status(500).json({ mensaje: err.sqlMessage });
   }
 });
+
 
 
 
